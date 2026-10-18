@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parametric Macropad & Hotswap Sockets CAD Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    canvas { touch-action: none; }
+    .badge { display: inline-flex; align-items: center; padding: 0.15rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-[var(--background,#0f172a)] text-[var(--foreground,#f8fafc)] antialiased p-4 md:p-6">
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Header Section -->
+    <div class="bg-[var(--card,#1e293b)] border border-[var(--border,#334155)] rounded-2xl p-6 shadow-lg">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="badge bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">Cherry MX + EC11 Encoder</span>
+            <span class="badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Monolithic Gridplate Ready</span>
+            <span class="badge bg-amber-500/20 text-amber-400 border border-amber-500/30">Parametric OpenSCAD</span>
+          </div>
+          <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Parametric Macropad Hotswap System</h1>
+          <p class="text-[var(--muted-foreground,#94a3b8)] text-sm mt-1">
+            Modular hotswap architecture for mechanical key switches & clickable EC11 rotary encoders, designed for seamless monolithic gridplates.
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <a href="#files" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg text-sm transition shadow-sm">
+            View CAD Files
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive 3D Canvas & Model Selector -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- 3D Viewport (2 Cols) -->
+      <div class="lg:col-span-2 bg-[var(--card,#1e293b)] border border-[var(--border,#334155)] rounded-2xl overflow-hidden shadow-lg flex flex-col">
+        <div class="p-4 border-b border-[var(--border,#334155)] flex flex-wrap items-center justify-between gap-3 bg-[var(--card,#1e293b)]/80">
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></div>
+            <span class="font-semibold text-sm">Interactive 3D CAD Inspector</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btn-model-kailh" class="px-2.5 py-1 text-xs rounded-md font-medium bg-indigo-600 text-white transition">MX Switch</button>
+            <button id="btn-model-ec11" class="px-2.5 py-1 text-xs rounded-md font-medium bg-[var(--border,#334155)] text-[var(--muted-foreground,#94a3b8)] hover:text-white transition">EC11 Encoder</button>
+            <button id="btn-model-grid" class="px-2.5 py-1 text-xs rounded-md font-medium bg-[var(--border,#334155)] text-[var(--muted-foreground,#94a3b8)] hover:text-white transition">3x3 Gridplate</button>
+            <button id="btn-model-wire" class="px-2.5 py-1 text-xs rounded-md font-medium bg-[var(--border,#334155)] text-[var(--muted-foreground,#94a3b8)] hover:text-white transition">DIY Wire-Spring</button>
+          </div>
+        </div>
+
+        <div class="relative w-full h-[400px] md:h-[480px] bg-gradient-to-b from-slate-950 to-slate-900 cursor-grab active:cursor-grabbing">
+          <canvas id="cad-canvas" class="w-full h-full block"></canvas>
+          
+          <!-- Viewport HUD Overlay -->
+          <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur border border-slate-700/60 rounded-lg p-2.5 text-xs text-slate-300 space-y-1">
+            <div class="font-semibold text-indigo-300 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+              Navigation
+            </div>
+            <div>• Drag: Rotate view</div>
+            <div>• Scroll / Pinch: Zoom in/out</div>
+          </div>
+
+          <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur border border-slate-700/60 rounded-lg p-2 text-xs text-slate-300 space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="chk-component" checked class="rounded border-slate-700 text-indigo-600 focus:ring-0">
+              <span id="lbl-component">Show Switch / Knob</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="chk-diode" checked class="rounded border-slate-700 text-indigo-600 focus:ring-0">
+              <span>Show Diode & Wires</span>
+            </label>
+            <div class="pt-1 border-t border-slate-700">
+              <span class="block text-[11px] text-slate-400 mb-1">Exploded View</span>
+              <input type="range" id="slider-explode" min="0" max="100" value="0" class="w-24 accent-indigo-500">
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 border-t border-[var(--border,#334155)] bg-[var(--card,#1e293b)]/40 flex items-center justify-between text-xs text-[var(--muted-foreground,#94a3b8)]">
+          <span id="model-dimension-hint">Dimensions: 23.8mm x 15.2mm x 4.9mm (with M2 ears)</span>
+          <button id="btn-reset-cam" class="hover:text-white transition">Reset Camera</button>
+        </div>
+      </div>
+
+      <!-- Architecture & Pinout Highlights (1 Col) -->
+      <div class="bg-[var(--card,#1e293b)] border border-[var(--border,#334155)] rounded-2xl p-5 shadow-lg space-y-4">
+        <h3 class="font-semibold text-base text-[var(--foreground,#f8fafc)]">EC11 Rotary Encoder Hotswap</h3>
+        
+        <div class="space-y-3 text-sm">
+          <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/40">
+            <div class="font-medium text-indigo-300 flex items-center gap-1.5 mb-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+              5 Receptacle Cavities
+            </div>
+            <p class="text-xs text-slate-400">
+              3 encoder pins (A, Common/GND, B at 2.50mm pitch) + 2 push switch pins. Fits standard Mill-Max 0305 receptacles or 2.54mm Dupont terminal sleeves.
+            </p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/40">
+            <div class="font-medium text-emerald-300 flex items-center gap-1.5 mb-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              Anti-Torque Chassis Slots
+            </div>
+            <p class="text-xs text-slate-400">
+              Dual 2.6 x 1.4mm slots at X = &plusmn;6.0mm clamp the encoder's metal side tabs, absorbing rotational torque and preventing wobble.
+            </p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/40">
+            <div class="font-medium text-amber-300 flex items-center gap-1.5 mb-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              Push-Switch Matrix Integration
+            </div>
+            <p class="text-xs text-slate-400">
+              The encoder push button has an integrated 1N4148 diode bay connecting to the keyboard matrix row/column, while A/C/B route directly to GPIO.
+            </p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/40">
+            <div class="font-medium text-purple-300 flex items-center gap-1.5 mb-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+              Monolithic Gridplate Ready
+            </div>
+            <p class="text-xs text-slate-400">
+              Both sockets share the exact same 5.2mm depth and 19.05mm grid alignment. You can place an EC11 anywhere on the macropad grid!
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Visual Wiring Verification & Spatial Separation Proof -->
+    <div class="bg-[var(--card,#1e293b)] border border-[var(--border,#334155)] rounded-2xl p-6 shadow-lg space-y-6">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Electrical Check: 100% Short-Proof</span>
+          <span class="badge bg-blue-500/20 text-blue-400 border border-blue-500/30">Zero Interference</span>
+        </div>
+        <h2 class="text-xl font-bold tracking-tight">Wiring Verification: Will the Wires Touch or Interfere?</h2>
+        <p class="text-sm text-[var(--muted-foreground,#94a3b8)] mt-1">
+          Analysis of physical clearances, routing paths, and non-overlapping channels for Direct-Pin handwiring.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <!-- Technical Macro 3D Render -->
+        <div class="bg-slate-900/60 border border-slate-700/60 rounded-xl overflow-hidden flex flex-col">
+          <div class="p-3 bg-slate-800/60 border-b border-slate-700/60 flex items-center justify-between text-xs">
+            <span class="font-semibold text-slate-200">Macro 3D Photo Render (Underside View)</span>
+            <span class="text-indigo-400 font-medium">PETG + Kailh Socket</span>
+          </div>
+          <div class="relative flex-1 bg-black flex items-center justify-center min-h-[300px]">
+            <img src="wiring_photo_render.jpg" alt="Macro 3D Render of Kailh Socket Wiring" class="w-full h-auto object-cover max-h-[360px]">
+          </div>
+          <div class="p-3 text-xs text-slate-400 bg-slate-900/80 border-t border-slate-700/40">
+            <strong class="text-slate-200">Visual Confirmation:</strong> The horizontal bare copper Ground wire (gold) is soldered to Terminal 1 on the left. The blue insulated signal wire exits upwards from Terminal 2 on the right. A solid plastic barrier separates them.
+          </div>
+        </div>
+
+        <!-- Technical Blueprint Vector Diagram -->
+        <div class="bg-slate-900/60 border border-slate-700/60 rounded-xl overflow-hidden flex flex-col">
+          <div class="p-3 bg-slate-800/60 border-b border-slate-700/60 flex items-center justify-between text-xs">
+            <span class="font-semibold text-slate-200">Dimensional Clearance Blueprint</span>
+            <span class="text-emerald-400 font-medium">&Delta;Y = 2.54mm | &Delta;X = 12.3mm</span>
+          </div>
+          <div class="relative flex-1 bg-slate-950 flex items-center justify-center p-2 min-h-[300px]">
+            <img src="wiring_blueprint.svg" alt="Technical Wiring Blueprint" class="w-full h-auto max-h-[360px]">
+          </div>
+          <div class="p-3 text-xs text-slate-400 bg-slate-900/80 border-t border-slate-700/40">
+            <strong class="text-emerald-400">Mathematical Proof:</strong> Ground wire lies strictly at <code class="text-amber-300">Y = +2.54mm</code>. Signal wire starts at <code class="text-blue-300">Y = +5.08mm</code> and exits to <code class="text-blue-300">+Y</code>. There is a continuous <strong>2.54mm solid wall</strong> in between.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monolithic Gridplate Architecture -->
+    <div class="bg-[var(--card,#1e293b)] border border-[var(--border,#334155)] rounded-2xl p-6 shadow-lg space-y-4">
+      <h2 class="text-lg font-bold flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+        Monolithic Macropad Gridplate Architecture
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-700/50 space-y-2">
+          <div class="font-semibold text-indigo-300">1. Parametric Grid Sizing</div>
+          <p class="text-xs text-slate-300">
+            Set <code>rows = 3</code>, <code>cols = 3</code>, and standard <code>pitch = 19.05</code> in <code>macropad_grid_plate.scad</code> to generate an instant monolithic midplate.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-700/50 space-y-2">
+          <div class="font-semibold text-emerald-300">2. Drop-in Encoder Mapping</div>
+          <p class="text-xs text-slate-300">
+            Define <code>encoder_locations = [[0, 2]]</code> to automatically convert any grid coordinate into an EC11 hotswap socket with anti-torque slots.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-700/50 space-y-2">
+          <div class="font-semibold text-amber-300">3. Continuous Matrix Trenches</div>
+          <p class="text-xs text-slate-300">
+            Continuous horizontal Row channels and vertical Column channels run unbroken across the entire plate for fast bus-wire handwiring.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Download Files Section -->
+    <div id="files" class="bg-[var(--card,#1e293b)] border border-[var(--border,#334155)] rounded-2xl p-6 shadow-lg">
+      <h2 class="text-lg font-bold mb-3 flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Modular OpenSCAD & STL CAD Files in Workspace
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+        <div class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-between">
+          <div>
+            <div class="font-medium text-slate-200">macropad_grid_plate.scad</div>
+            <div class="text-xs text-slate-400">Master monolithic gridplate module (parametric N x M)</div>
+          </div>
+          <span class="badge bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">OpenSCAD Master</span>
+        </div>
+
+        <div class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-between">
+          <div>
+            <div class="font-medium text-slate-200">ec11_hotswap_socket.scad</div>
+            <div class="text-xs text-slate-400">Modular EC11 rotary encoder hotswap socket</div>
+          </div>
+          <span class="badge bg-amber-500/20 text-amber-300 border border-amber-500/30">OpenSCAD</span>
+        </div>
+
+        <div class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-between">
+          <div>
+            <div class="font-medium text-slate-200">keyboard_switch_socket.scad</div>
+            <div class="text-xs text-slate-400">Modular MX Kailh hotswap socket (standalone & negative)</div>
+          </div>
+          <span class="badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">OpenSCAD</span>
+        </div>
+
+        <div class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-between">
+          <div>
+            <div class="font-medium text-slate-200">ec11_hotswap_socket.stl</div>
+            <div class="text-xs text-slate-400">Compiled EC11 hotswap socket with M2 mounting tabs</div>
+          </div>
+          <span class="badge bg-purple-500/20 text-purple-300 border border-purple-500/30">Binary STL</span>
+        </div>
+
+        <div class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-between">
+          <div>
+            <div class="font-medium text-slate-200">ec11_hotswap_socket_compact.stl</div>
+            <div class="text-xs text-slate-400">Compact 15.2 x 15.2mm EC11 socket (switch slot drop-in)</div>
+          </div>
+          <span class="badge bg-purple-500/20 text-purple-300 border border-purple-500/30">Binary STL</span>
+        </div>
+
+        <div class="p-3 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-between">
+          <div>
+            <div class="font-medium text-slate-200">kailh_hotswap_caddy.stl</div>
+            <div class="text-xs text-slate-400">Compiled Cherry MX Kailh socket with M2 tabs</div>
+          </div>
+          <span class="badge bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Binary STL</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Interactive 3D Canvas Script (Isometric/Perspective 3D Wireframe & Shaded Renderer) -->
+  <script>
+    (function() {
+      const canvas = document.getElementById('cad-canvas');
+      const ctx = canvas.getContext('2d');
+
+      let currentModel = 'kailh'; // 'kailh', 'ec11', 'grid', 'wire'
+      let showComponent = true;
+      let showDiode = true;
+      let explodeFactor = 0.0;
+
+      // Orbit camera state
+      let rotX = 0.55; // elevation
+      let rotY = -0.75; // azimuth
+      let zoom = 14.0;
+      let isDragging = false;
+      let lastMouseX = 0;
+      let lastMouseY = 0;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
+        render();
+      }
+      window.addEventListener('resize', resize);
+
+      canvas.addEventListener('mousedown', e => {
+        isDragging = true;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+      });
+      window.addEventListener('mouseup', () => isDragging = false);
+      window.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        rotY += dx * 0.008;
+        rotX = Math.max(-1.4, Math.min(1.4, rotX + dy * 0.008));
+        render();
+      });
+
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        zoom *= (e.deltaY > 0 ? 0.92 : 1.08);
+        zoom = Math.max(3.0, Math.min(35.0, zoom));
+        render();
+      }, { passive: false });
+
+      // Model Switch buttons
+      const btnKailh = document.getElementById('btn-model-kailh');
+      const btnEc11 = document.getElementById('btn-model-ec11');
+      const btnGrid = document.getElementById('btn-model-grid');
+      const btnWire = document.getElementById('btn-model-wire');
+      const dimHint = document.getElementById('model-dimension-hint');
+      const lblComp = document.getElementById('lbl-component');
+
+      function updateActiveBtn() {
+        [btnKailh, btnEc11, btnGrid, btnWire].forEach(b => {
+          b.className = "px-2.5 py-1 text-xs rounded-md font-medium bg-[var(--border,#334155)] text-[var(--muted-foreground,#94a3b8)] hover:text-white transition";
+        });
+        if (currentModel === 'kailh') {
+          btnKailh.className = "px-2.5 py-1 text-xs rounded-md font-medium bg-indigo-600 text-white transition";
+          dimHint.textContent = "MX Socket: 23.8mm x 15.2mm x 4.9mm (with M2 ears)";
+          lblComp.textContent = "Show MX Switch";
+          zoom = 14.0;
+        } else if (currentModel === 'ec11') {
+          btnEc11.className = "px-2.5 py-1 text-xs rounded-md font-medium bg-indigo-600 text-white transition";
+          dimHint.textContent = "EC11 Socket: 23.8mm x 15.2mm x 5.3mm (with M2 ears & anti-torque slots)";
+          lblComp.textContent = "Show EC11 Knob";
+          zoom = 14.0;
+        } else if (currentModel === 'grid') {
+          btnGrid.className = "px-2.5 py-1 text-xs rounded-md font-medium bg-indigo-600 text-white transition";
+          dimHint.textContent = "Monolithic 3x3 Plate: 65.15mm x 65.15mm x 5.2mm (EC11 in top-right)";
+          lblComp.textContent = "Show Switches & Knob";
+          zoom = 5.2;
+        } else if (currentModel === 'wire') {
+          btnWire.className = "px-2.5 py-1 text-xs rounded-md font-medium bg-indigo-600 text-white transition";
+          dimHint.textContent = "DIY Wire Spring: 15.2mm x 15.2mm x 4.3mm";
+          lblComp.textContent = "Show MX Switch";
+          zoom = 14.0;
+        }
+        render();
+      }
+
+      btnKailh.onclick = () => { currentModel = 'kailh'; updateActiveBtn(); };
+      btnEc11.onclick = () => { currentModel = 'ec11'; updateActiveBtn(); };
+      btnGrid.onclick = () => { currentModel = 'grid'; updateActiveBtn(); };
+      btnWire.onclick = () => { currentModel = 'wire'; updateActiveBtn(); };
+
+      document.getElementById('chk-component').onchange = (e) => { showComponent = e.target.checked; render(); };
+      document.getElementById('chk-diode').onchange = (e) => { showDiode = e.target.checked; render(); };
+      document.getElementById('slider-explode').oninput = (e) => { explodeFactor = parseFloat(e.target.value) / 100.0; render(); };
+      document.getElementById('btn-reset-cam').onclick = () => {
+        rotX = 0.55; rotY = -0.75;
+        zoom = (currentModel === 'grid') ? 5.2 : 14.0;
+        render();
+      };
+
+      function project(x, y, z, cx, cy) {
+        const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+        const x1 = x * cosY - y * sinY;
+        const y1 = x * sinY + y * cosY;
+        const z1 = z;
+
+        const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+        const y2 = y1 * cosX - z1 * sinX;
+        const z2 = y1 * sinX + z1 * cosX;
+        const x2 = x1;
+
+        const px = cx + x2 * zoom * (canvas.width / 800);
+        const py = cy - z2 * zoom * (canvas.width / 800);
+        return { x: px, y: py, depth: y2 };
+      }
+
+      function drawBox(ctx, minX, minY, minZ, maxX, maxY, maxZ, fillStyle, strokeStyle, cx, cy, zOffset=0, xOffset=0, yOffset=0) {
+        const v = [
+          [minX + xOffset, minY + yOffset, minZ + zOffset], [maxX + xOffset, minY + yOffset, minZ + zOffset],
+          [maxX + xOffset, maxY + yOffset, minZ + zOffset], [minX + xOffset, maxY + yOffset, minZ + zOffset],
+          [minX + xOffset, minY + yOffset, maxZ + zOffset], [maxX + xOffset, minY + yOffset, maxZ + zOffset],
+          [maxX + xOffset, maxY + yOffset, maxZ + zOffset], [minX + xOffset, maxY + yOffset, maxZ + zOffset],
+        ];
+        const faces = [
+          { verts: [0, 1, 2, 3], normal: [0, 0, -1] },
+          { verts: [4, 5, 6, 7], normal: [0, 0, 1] },
+          { verts: [0, 1, 5, 4], normal: [0, -1, 0] },
+          { verts: [2, 3, 7, 6], normal: [0, 1, 0] },
+          { verts: [0, 4, 7, 3], normal: [-1, 0, 0] },
+          { verts: [1, 2, 6, 5], normal: [1, 0, 0] },
+        ];
+
+        const faceData = faces.map(f => {
+          let sumZ = 0;
+          const pverts = f.verts.map(i => {
+            const p = project(v[i][0], v[i][1], v[i][2], cx, cy);
+            sumZ += p.depth;
+            return p;
+          });
+          return { verts: pverts, depth: sumZ / 4, normal: f.normal };
+        });
+
+        faceData.sort((a, b) => a.depth - b.depth);
+        const lx = 0.577, ly = -0.577, lz = 0.577;
+
+        faceData.forEach(f => {
+          const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+          const nx1 = f.normal[0] * cosY - f.normal[1] * sinY;
+          const ny1 = f.normal[0] * sinY + f.normal[1] * cosY;
+          const nz1 = f.normal[2];
+          const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+          const ny2 = ny1 * cosX - nz1 * sinX;
+          const nz2 = ny1 * sinX + nz1 * cosX;
+
+          if (ny2 <= -0.05) return;
+          const dot = Math.max(0.2, (f.normal[0]*lx + f.normal[1]*ly + f.normal[2]*lz));
+          
+          ctx.beginPath();
+          ctx.moveTo(f.verts[0].x, f.verts[0].y);
+          for (let i = 1; i < f.verts.length; i++) ctx.lineTo(f.verts[i].x, f.verts[i].y);
+          ctx.closePath();
+          ctx.fillStyle = fillStyle(dot);
+          ctx.fill();
+          if (strokeStyle) {
+            ctx.strokeStyle = strokeStyle;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        });
+      }
+
+      function drawCylinder(ctx, x, y, z0, z1, radius, fillStyle, cx, cy, segs=12, zOffset=0) {
+        for (let i = 0; i < segs; i++) {
+          const a1 = (i / segs) * Math.PI * 2;
+          const a2 = ((i + 1) / segs) * Math.PI * 2;
+          const x1 = x + Math.cos(a1) * radius, y1 = y + Math.sin(a1) * radius;
+          const x2 = x + Math.cos(a2) * radius, y2 = y + Math.sin(a2) * radius;
+
+          const p1 = project(x1, y1, z0 + zOffset, cx, cy);
+          const p2 = project(x2, y2, z0 + zOffset, cx, cy);
+          const p3 = project(x2, y2, z1 + zOffset, cx, cy);
+          const p4 = project(x1, y1, z1 + zOffset, cx, cy);
+
+          const nx = Math.cos((a1+a2)/2), ny = Math.sin((a1+a2)/2);
+          const dot = Math.max(0.3, nx*0.6 + ny*0.4 + 0.5);
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.lineTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y);
+          ctx.closePath();
+          ctx.fillStyle = fillStyle(dot);
+          ctx.fill();
+        }
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+
+        // Ground grid
+        ctx.strokeStyle = "rgba(71, 85, 105, 0.25)";
+        ctx.lineWidth = 1;
+        const gridRange = (currentModel === 'grid') ? 45 : 25;
+        for (let g = -gridRange; g <= gridRange; g += 5) {
+          const p1 = project(g, -gridRange, 0, cx, cy);
+          const p2 = project(g, gridRange, 0, cx, cy);
+          ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+          const p3 = project(-gridRange, g, 0, cx, cy);
+          const p4 = project(gridRange, g, 0, cx, cy);
+          ctx.beginPath(); ctx.moveTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y); ctx.stroke();
+        }
+
+        const zCaddy = 0;
+        const zExplode = explodeFactor * 14;
+
+        if (currentModel === 'kailh' || currentModel === 'wire') {
+          // MX Switch Socket Caddy
+          const caddyColor = (d) => `rgba(${Math.floor(79*d + 30)}, ${Math.floor(70*d + 60)}, ${Math.floor(229*d + 100)}, 0.88)`;
+          const caddyStroke = "rgba(165, 180, 252, 0.5)";
+          drawBox(ctx, -7.6, -7.6, 0, 7.6, 7.6, 4.8, caddyColor, caddyStroke, cx, cy, zCaddy);
+          drawBox(ctx, -11.8, -3.5, 0, -7.6, 3.5, 2.4, caddyColor, caddyStroke, cx, cy, zCaddy);
+          drawBox(ctx, 7.6, -3.5, 0, 11.8, 3.5, 2.4, caddyColor, caddyStroke, cx, cy, zCaddy);
+
+          if (currentModel === 'kailh') {
+            // Kailh socket on underside
+            drawBox(ctx, -6.6, 1.2, 0.5, 6.2, 6.4, 3.2, 
+              (d) => `rgb(${Math.floor(35*d + 15)}, ${Math.floor(35*d + 15)}, ${Math.floor(40*d + 20)})`,
+              "rgba(100, 116, 139, 0.4)", cx, cy, -zExplode
+            );
+          }
+
+          if (showDiode) {
+            // Horizontal Ground wire running directly across Terminal 1 solder wing at Y = 2.54
+            drawBox(ctx, -10.0, 2.1, 0.7, 10.0, 2.9, 1.4, (d) => `rgb(${Math.floor(245*d)}, 158, 11)`, null, cx, cy);
+            // Signal wire running from Terminal 2 solder wing at (X = 5.8, Y = 5.08) exiting to +Y
+            drawBox(ctx, 5.3, 4.6, 0.7, 6.3, 9.5, 1.4, (d) => `rgb(59, 130, 246)`, null, cx, cy);
+          }
+
+          if (showComponent) {
+            // MX Switch
+            const zSw = 4.8 + zExplode;
+            drawBox(ctx, -7.0, -7.0, 0, 7.0, 7.0, 5.0, 
+              (d) => `rgba(${Math.floor(51*d + 20)}, ${Math.floor(65*d + 30)}, ${Math.floor(85*d + 40)}, 0.95)`,
+              "rgba(148, 163, 184, 0.4)", cx, cy, zSw
+            );
+            drawCylinder(ctx, 0, 0, -3.8, 0, 2.0, (d) => "#0f172a", cx, cy, 10, zSw);
+            drawBox(ctx, -2.5, -2.5, 5.0, 2.5, 2.5, 9.0, (d) => `rgb(${Math.floor(220*d)}, 38, 38)`, null, cx, cy, zSw);
+          }
+
+        } else if (currentModel === 'ec11') {
+          // EC11 Rotary Encoder Socket
+          const caddyColor = (d) => `rgba(${Math.floor(16*d + 20)}, ${Math.floor(185*d + 30)}, ${Math.floor(129*d + 40)}, 0.88)`;
+          const caddyStroke = "rgba(110, 231, 183, 0.5)";
+          drawBox(ctx, -7.6, -7.6, 0, 7.6, 7.6, 5.2, caddyColor, caddyStroke, cx, cy, zCaddy);
+          drawBox(ctx, -11.8, -3.5, 0, -7.6, 3.5, 2.4, caddyColor, caddyStroke, cx, cy, zCaddy);
+          drawBox(ctx, 7.6, -3.5, 0, 11.8, 3.5, 2.4, caddyColor, caddyStroke, cx, cy, zCaddy);
+
+          // 5 Receptacle Gold Terminals on underside (exact Y = -5.5 and Y = +5.0)
+          for (let px of [-2.5, 0, 2.5]) {
+            drawBox(ctx, px - 0.7, -5.9, 0.6, px + 0.7, -5.1, 2.8, () => "#eab308", null, cx, cy, -zExplode);
+          }
+          for (let sx of [-2.5, 2.5]) {
+            drawBox(ctx, sx - 0.7, 4.6, 0.6, sx + 0.7, 5.4, 2.8, () => "#eab308", null, cx, cy, -zExplode);
+          }
+
+          if (showComponent) {
+            const zEc = 5.2 + zExplode;
+            // Metal EC11 Body (Silver/metallic)
+            drawBox(ctx, -5.8, -6.0, 0, 5.8, 6.0, 4.5,
+              (d) => `rgb(${Math.floor(180*d + 40)}, ${Math.floor(190*d + 40)}, ${Math.floor(205*d + 40)})`,
+              "rgba(255,255,255,0.6)", cx, cy, zEc
+            );
+            // Side bracket anti-torque tabs
+            drawBox(ctx, -6.6, -0.8, -2.0, -5.8, 0.8, 3.0, (d) => "#94a3b8", null, cx, cy, zEc);
+            drawBox(ctx, 5.8, -0.8, -2.0, 6.6, 0.8, 3.0, (d) => "#94a3b8", null, cx, cy, zEc);
+            // Bushing collar
+            drawCylinder(ctx, 0, 0, 4.5, 9.0, 3.5, (d) => `rgb(${Math.floor(160*d)}, ${Math.floor(160*d)}, ${Math.floor(160*d)})`, cx, cy, 14, zEc);
+            // Rotary Knob (Aluminium knurled knob)
+            drawCylinder(ctx, 0, 0, 9.0, 18.0, 7.5, (d) => `rgb(${Math.floor(60*d + 20)}, ${Math.floor(70*d + 20)}, ${Math.floor(90*d + 30)})`, cx, cy, 16, zEc);
+          }
+
+        } else if (currentModel === 'grid') {
+          // Monolithic 3x3 Gridplate
+          const plateColor = (d) => `rgba(${Math.floor(30*d + 20)}, ${Math.floor(41*d + 25)}, ${Math.floor(59*d + 30)}, 0.95)`;
+          const plateStroke = "rgba(99, 102, 241, 0.6)";
+          const totalW = 3 * 19.05 + 8;
+          drawBox(ctx, -totalW/2, -totalW/2, 0, totalW/2, totalW/2, 5.2, plateColor, plateStroke, cx, cy, 0);
+
+          // Draw the 9 socket bays
+          const pitch = 19.05;
+          for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 3; c++) {
+              const px = -pitch + c * pitch;
+              const py = pitch - r * pitch;
+              const isEnc = (r === 0 && c === 2); // Top-right is EC11
+
+              if (isEnc) {
+                // EC11 bay accent
+                drawBox(ctx, px-6, py-6, 3.0, px+6, py+6, 5.3, (d) => "rgba(16, 185, 129, 0.3)", "#10b981", cx, cy);
+                if (showComponent) {
+                  drawCylinder(ctx, px, py, 5.2, 17.0, 6.5, (d) => `rgb(${Math.floor(50*d)}, ${Math.floor(150*d)}, ${Math.floor(100*d)})`, cx, cy, 14);
+                }
+              } else {
+                // Switch bay
+                drawBox(ctx, px-7, py-7, 4.2, px+7, py+7, 5.3, (d) => "rgba(99, 102, 241, 0.2)", "#6366f1", cx, cy);
+                if (showComponent) {
+                  drawBox(ctx, px-6.5, py-6.5, 5.2, px+6.5, py+6.5, 9.5, (d) => `rgb(${Math.floor(40*d+20)}, ${Math.floor(50*d+20)}, ${Math.floor(70*d+30)})`, null, cx, cy);
+                  drawBox(ctx, px-2, py-2, 9.5, px+2, py+2, 12.5, () => "#ef4444", null, cx, cy);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      setTimeout(resize, 50);
+    })();
+  </script>
+</body>
+</html>

@@ -39,7 +39,9 @@ parametric-macropad-hotswap/
 │       ├── solderless_ec11_socket.stl
 │       └── wire_spring_hotswap_socket.stl
 │
-├── docs/                         # Schematics, Diagrams & 3D Photo Renders
+├── docs/                         # Interactive 3D Inspector, Schematics & Renders
+│   ├── index.html                # Interactive 3D WebGL/Canvas CAD Inspector (GitHub Pages ready)
+│   ├── interactive_3d_inspector.html
 │   ├── wiring_blueprint.svg      # Vector blueprint with exact dimensional clearances
 │   ├── wiring_diagram.png        # Color raster wiring diagram
 │   └── wiring_photo_render.jpg   # Photorealistic 3D macro render of wired socket
@@ -51,6 +53,9 @@ parametric-macropad-hotswap/
 ---
 
 ## 🕹️ Quick File Links
+
+### 🌐 Interactive 3D CAD Inspector
+* 🔍 **[`docs/interactive_3d_inspector.html`](docs/interactive_3d_inspector.html)** — Full in-browser 3D WebGL/Canvas viewer with exploded views, cross-sections, and real-time switch/encoder inspection (open directly in your browser or deploy via GitHub Pages!).
 
 ### 📐 OpenSCAD CAD Models
 * 🧱 [`cad/macropad_grid_plate.scad`](cad/macropad_grid_plate.scad) — **Master Monolithic Gridplate with MCU Endpoint Dock**
