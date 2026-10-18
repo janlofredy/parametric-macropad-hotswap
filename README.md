@@ -15,7 +15,7 @@ A modular, 3D-printable hotswap architecture designed for custom mechanical keyb
 ## 📂 Project Directory Structure
 
 ```
-jolly-shannon/
+parametric-macropad-hotswap/
 ├── cad/                          # Parametric OpenSCAD Source Models
 │   ├── macropad_grid_plate.scad  # Master monolithic gridplate with MCU dock
 │   ├── keyboard_switch_socket.scad # Modular MX Kailh socket (standalone & negative)
@@ -53,19 +53,19 @@ jolly-shannon/
 ## 🕹️ Quick File Links
 
 ### 📐 OpenSCAD CAD Models
-* 🧱 [`cad/macropad_grid_plate.scad`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/cad/macropad_grid_plate.scad) — **Master Monolithic Gridplate with MCU Endpoint Dock**
-* ⌨️ [`cad/keyboard_switch_socket.scad`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/cad/keyboard_switch_socket.scad) — Modular Cherry MX hotswap socket
-* 🎚️ [`cad/ec11_hotswap_socket.scad`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/cad/ec11_hotswap_socket.scad) — Modular EC11 clickable rotary encoder socket
-* 🌿 [`cad/solderless/solderless_macropad_grid_plate.scad`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/cad/solderless/solderless_macropad_grid_plate.scad) — 100% Solderless wire-pinch monolithic gridplate
+* 🧱 [`cad/macropad_grid_plate.scad`](cad/macropad_grid_plate.scad) — **Master Monolithic Gridplate with MCU Endpoint Dock**
+* ⌨️ [`cad/keyboard_switch_socket.scad`](cad/keyboard_switch_socket.scad) — Modular Cherry MX hotswap socket
+* 🎚️ [`cad/ec11_hotswap_socket.scad`](cad/ec11_hotswap_socket.scad) — Modular EC11 clickable rotary encoder socket
+* 🌿 [`cad/solderless/solderless_macropad_grid_plate.scad`](cad/solderless/solderless_macropad_grid_plate.scad) — 100% Solderless wire-pinch monolithic gridplate
 
 ### 🖨️ Ready-to-Print 3D STL Models
-* 🚀 [`stl/gridplates/macropad_3x3_with_mcu_dock.stl`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/stl/gridplates/macropad_3x3_with_mcu_dock.stl) — Complete 3x3 macropad plate with top MCU dock ($65.2 \times 83.2 \times 5.2\text{ mm}$)
-* 🔌 [`stl/hotswap_sockets/kailh_hotswap_caddy.stl`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/stl/hotswap_sockets/kailh_hotswap_caddy.stl) — MX switch socket with M2 tabs
-* 🔌 [`stl/hotswap_sockets/ec11_hotswap_socket.stl`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/stl/hotswap_sockets/ec11_hotswap_socket.stl) — EC11 encoder socket with M2 tabs
+* 🚀 [`stl/gridplates/macropad_3x3_with_mcu_dock.stl`](stl/gridplates/macropad_3x3_with_mcu_dock.stl) — Complete 3x3 macropad plate with top MCU dock ($65.2 \times 83.2 \times 5.2\text{ mm}$)
+* 🔌 [`stl/hotswap_sockets/kailh_hotswap_caddy.stl`](stl/hotswap_sockets/kailh_hotswap_caddy.stl) — MX switch socket with M2 tabs
+* 🔌 [`stl/hotswap_sockets/ec11_hotswap_socket.stl`](stl/hotswap_sockets/ec11_hotswap_socket.stl) — EC11 encoder socket with M2 tabs
 
 ### 📊 Visual Blueprint & Renders
-* 📷 [`docs/wiring_photo_render.jpg`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/docs/wiring_photo_render.jpg) — Photorealistic 3D macro render
-* 📐 [`docs/wiring_blueprint.svg`](file:///Users/janlofredy/Documents/antigravity/jolly-shannon/docs/wiring_blueprint.svg) — Vector clearance blueprint
+* 📷 [`docs/wiring_photo_render.jpg`](docs/wiring_photo_render.jpg) — Photorealistic 3D macro render
+* 📐 [`docs/wiring_blueprint.svg`](docs/wiring_blueprint.svg) — Vector clearance blueprint
 
 ---
 
