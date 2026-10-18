@@ -55,7 +55,8 @@ parametric-macropad-hotswap/
 ## 🕹️ Quick File Links
 
 ### 🌐 Interactive 3D CAD Inspector
-* 🔍 **[`docs/interactive_3d_inspector.html`](docs/interactive_3d_inspector.html)** — Full in-browser 3D WebGL/Canvas viewer with exploded views, cross-sections, and real-time switch/encoder inspection (open directly in your browser or deploy via GitHub Pages!).
+* 🚀 **[Launch Live Web Inspector](https://janlofredy.github.io/parametric-macropad-hotswap/)** (or on custom domain: [janlofre.com](http://janlofre.com/parametric-macropad-hotswap/))
+* 🔍 Source: [`docs/interactive_3d_inspector.html`](docs/interactive_3d_inspector.html) — Full in-browser 3D WebGL/Canvas viewer with exploded views, cross-sections, and real-time switch/encoder inspection.
 
 ### 📐 OpenSCAD CAD Models
 * 🧱 [`cad/macropad_grid_plate.scad`](cad/macropad_grid_plate.scad) — **Master Monolithic Gridplate with MCU Endpoint Dock**
