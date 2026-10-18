@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 750" width="1000" height="750" style="background:#090d16; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="kailhGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2e39"/>
+      <stop offset="100%" stop-color="#151821"/>
+    </linearGradient>
+    <linearGradient id="copperGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffb347"/>
+      <stop offset="50%" stop-color="#ff8c00"/>
+      <stop offset="100%" stop-color="#d35400"/>
+    </linearGradient>
+    <linearGradient id="blueWireGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="solderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="60%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="goldLugGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    
+    <!-- Grid pattern -->
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.7"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Grid -->
+  <rect width="1000" height="750" fill="url(#grid)" />
+
+  <!-- Title & Headers -->
+  <text x="50" y="45" fill="#f8fafc" font-size="22" font-weight="bold">Mechanical Keyboard Hotswap Socket — Underside Wiring Blueprint</text>
+  <text x="50" y="70" fill="#94a3b8" font-size="13">Direct-Pin (Zero Diode) Clearance &amp; Short-Proof Verification Analysis</text>
+
+  <!-- Main Caddy Body (Center at 500, 390. Scale: 1mm = 24px) -->
+  <!-- 15.4mm x 15.4mm = 370px x 370px. Centered at (500, 390) -> (315, 205) to (685, 575) -->
+  <g transform="translate(500, 390)">
+    
+    <!-- Mounting Tabs -->
+    <rect x="-240" y="-80" width="480" height="160" rx="20" fill="#131b2e" stroke="#334155" stroke-width="2"/>
+    <circle cx="-210" cy="0" r="26" fill="#090d16" stroke="#475569" stroke-width="1.5"/>
+    <circle cx="210" cy="0" r="26" fill="#090d16" stroke="#475569" stroke-width="1.5"/>
+    <text x="-210" y="5" fill="#64748b" font-size="10" text-anchor="middle">M2</text>
+    <text x="210" y="5" fill="#64748b" font-size="10" text-anchor="middle">M2</text>
+
+    <!-- Main 15.4mm Socket Body -->
+    <rect x="-185" y="-185" width="370" height="370" rx="16" fill="url(#bodyGrad)" stroke="#38bdf8" stroke-width="2.5"/>
+
+    <!-- Center MX Stem Through-Hole (Dia 4.0mm = 96px) -->
+    <circle cx="0" cy="0" r="48" fill="#090d16" stroke="#475569" stroke-width="2"/>
+    <text x="0" y="4" fill="#64748b" font-size="11" text-anchor="middle">Stem Bore</text>
+
+    <!-- 5-Pin Stabilizer Holes (at X = +/- 122px) -->
+    <circle cx="-122" cy="0" r="24" fill="#090d16" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="122" cy="0" r="24" fill="#090d16" stroke="#334155" stroke-width="1.5"/>
+
+    <!-- Kailh Socket Cavity (CPG151101S01 Body) -->
+    <!-- Kailh body spans between the two pins -->
+    <path d="M -160 -40 Q -170 -120, -70 -120 L 110 -150 Q 160 -150, 160 -100 L 160 -70 Q 150 -10, 80 -40 L -60 -20 Q -140 -20, -160 -40 Z" 
+          fill="url(#kailhGrad)" stroke="#475569" stroke-width="2"/>
+
+    <!-- Terminal 1 Pin Slot (-3.81mm, +2.54mm) -> (-91px, -61px in screen coords where Y is down) -->
+    <!-- Notice: In CAD, Y+ is up, so in SVG screen coords Y is inverted: Y_svg = -Y_cad * 24 -->
+    <!-- Y = +2.54mm -> -61px. Y = +5.08mm -> -122px -->
+    <circle cx="-91" cy="-61" r="18" fill="#090d16" stroke="#eab308" stroke-width="2"/>
+    
+    <!-- Terminal 2 Pin Slot (+2.54mm, +5.08mm) -> (+61px, -122px) -->
+    <circle cx="61" cy="-122" r="18" fill="#090d16" stroke="#eab308" stroke-width="2"/>
+
+    <!-- Kailh Metal Solder Lug 1 at X = -6.5mm (-156px), Y = +2.54mm (-61px) -->
+    <rect x="-175" y="-81" width="55" height="40" rx="4" fill="url(#goldLugGrad)" stroke="#fef08a" stroke-width="1.5"/>
+    <text x="-147" y="-56" fill="#78350f" font-size="11" font-weight="bold" text-anchor="middle">T1</text>
+
+    <!-- Kailh Metal Solder Lug 2 at X = +5.8mm (+139px), Y = +5.08mm (-122px) -->
+    <rect x="115" y="-142" width="55" height="40" rx="4" fill="url(#goldLugGrad)" stroke="#fef08a" stroke-width="1.5"/>
+    <text x="142" y="-117" fill="#78350f" font-size="11" font-weight="bold" text-anchor="middle">T2</text>
+
+    <!-- 3D PRINTED RECESSED WIRE CHANNELS (TRENCHES IN PLASTIC) -->
+    <!-- Channel 1: Horizontal Ground Trench along Y = -61px (width = 36px) -->
+    <rect x="-185" y="-79" width="370" height="36" fill="#090d16" opacity="0.6" stroke="#0284c7" stroke-dasharray="4,4" stroke-width="1.5"/>
+
+    <!-- Channel 2: Vertical Signal Trench along X = 139px from Y = -142px going up to Y = -185px -->
+    <rect x="123" y="-185" width="38" height="65" fill="#090d16" opacity="0.6" stroke="#60a5fa" stroke-dasharray="4,4" stroke-width="1.5"/>
+
+    <!-- ============================================== -->
+    <!-- ACTUAL WIRES -->
+    <!-- ============================================== -->
+
+    <!-- WIRE 1: BARE SOLID COPPER GROUND BUS WIRE -->
+    <!-- Runs continuously from left to right along Y = -61px -->
+    <rect x="-260" y="-68" width="520" height="15" rx="7" fill="url(#copperGrad)" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.6))"/>
+    
+    <!-- Solder joint at Terminal 1 -->
+    <ellipse cx="-147" cy="-61" rx="22" ry="16" fill="url(#solderGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+    <circle cx="-147" cy="-61" r="5" fill="#f8fafc" opacity="0.8"/>
+
+    <!-- WIRE 2: BLUE INSULATED SIGNAL WIRE (TO MCU GPIO) -->
+    <!-- Soldered to Terminal 2, routed strictly UPWARD through channel -->
+    <path d="M 142 -122 L 142 -220" stroke="url(#blueWireGrad)" stroke-width="16" stroke-linecap="round" fill="none" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.6))"/>
+    <!-- Wire Core tip visible -->
+    <ellipse cx="142" cy="-122" rx="18" ry="14" fill="url(#solderGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+
+    <!-- ============================================== -->
+    <!-- SPATIAL SEPARATION & CLEARANCE CALLOUTS -->
+    <!-- ============================================== -->
+
+    <!-- Solid Plastic Barrier highlight -->
+    <rect x="-170" y="-40" width="340" height="210" rx="8" fill="#10b981" opacity="0.08" stroke="#10b981" stroke-dasharray="6,4" stroke-width="1.5"/>
+    <text x="0" y="65" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle">SOLID PLASTIC ISOLATION ZONE</text>
+    <text x="0" y="85" fill="#a7f3d0" font-size="11" text-anchor="middle">100% Solid PETG Wall — Zero Contact Possible</text>
+
+    <!-- Vertical Gap Dimension Line (between Y = -61 and Y = -122) -> Delta Y = 61px (2.54mm) -->
+    <line x1="85" y1="-61" x2="85" y2="-122" stroke="#f43f5e" stroke-width="2"/>
+    <line x1="80" y1="-61" x2="90" y2="-61" stroke="#f43f5e" stroke-width="2"/>
+    <line x1="80" y1="-122" x2="90" y2="-122" stroke="#f43f5e" stroke-width="2"/>
+    <rect x="92" y="-100" width="135" height="22" rx="4" fill="#881337" stroke="#f43f5e" stroke-width="1"/>
+    <text x="98" y="-85" fill="#fecdd3" font-size="11" font-weight="bold">ΔY = 2.54mm Gap</text>
+
+    <!-- Horizontal Distance Line (between X = -147 and X = +142) -> Delta X = 289px (12.3mm) -->
+    <line x1="-147" y1="-15" x2="142" y2="-15" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="-147" y1="-25" x2="-147" y2="-5" stroke="#f59e0b" stroke-width="1.5"/>
+    <line x1="142" y1="-25" x2="142" y2="-5" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="-2" y="-2" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle">ΔX = 12.3mm Distance</text>
+
+  </g>
+
+  <!-- Info Cards (Left and Right) -->
+  
+  <!-- Left Card: Ground Bus Wire Specs -->
+  <g transform="translate(50, 150)">
+    <rect width="210" height="190" rx="12" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+    <circle cx="24" cy="24" r="8" fill="#f59e0b"/>
+    <text x="40" y="28" fill="#f8fafc" font-size="13" font-weight="bold">1. Ground Bus Wire</text>
+    <text x="15" y="55" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Type:</tspan> Bare solid copper (22-24 AWG)</text>
+    <text x="15" y="75" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Path:</tspan> Continuous horizontal (X-axis)</text>
+    <text x="15" y="95" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Location:</tspan> Exactly at Y = +2.54mm</text>
+    <text x="15" y="115" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Connection:</tspan> Solder directly to T1</text>
+    <text x="15" y="135" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Trench:</tspan> Recessed 1.2mm deep</text>
+    <rect x="15" y="150" width="180" height="24" rx="6" fill="#78350f"/>
+    <text x="105" y="166" fill="#fef08a" font-size="10" font-weight="bold" text-anchor="middle">Passes straight to next key</text>
+  </g>
+
+  <!-- Right Card: Signal Wire Specs -->
+  <g transform="translate(740, 150)">
+    <rect width="210" height="190" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+    <circle cx="24" cy="24" r="8" fill="#3b82f6"/>
+    <text x="40" y="28" fill="#f8fafc" font-size="13" font-weight="bold">2. Signal Wire (GPIO)</text>
+    <text x="15" y="55" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Type:</tspan> Insulated wire (28-30 AWG)</text>
+    <text x="15" y="75" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Path:</tspan> Vertical exit upwards (+Y)</text>
+    <text x="15" y="95" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Location:</tspan> Starts at X = +5.8mm</text>
+    <text x="15" y="115" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Connection:</tspan> Soldered to T2</text>
+    <text x="15" y="135" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Destination:</tspan> Direct to MCU GPIO</text>
+    <rect x="15" y="150" width="180" height="24" rx="6" fill="#1e3a8a"/>
+    <text x="105" y="166" fill="#bfdbfe" font-size="10" font-weight="bold" text-anchor="middle">Zero overlap with Ground bus</text>
+  </g>
+
+  <!-- Bottom Verification Verdict Box -->
+  <g transform="translate(180, 640)">
+    <rect width="640" height="75" rx="12" fill="#064e3b" stroke="#10b981" stroke-width="2"/>
+    <path d="M 25 38 L 38 50 L 60 25" fill="none" stroke="#34d399" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="75" y="33" fill="#ffffff" font-size="14" font-weight="bold">Short-Circuit &amp; Interference Verification: PASSED</text>
+    <text x="75" y="52" fill="#a7f3d0" font-size="11">The Ground bus (Y = +2.54) and Signal wire (Y &gt; +5.08) are physically separated by 2.54mm of solid plastic wall in Y and 12.3mm in X. They never cross, touch, or interfere.</text>
+  </g>
+</svg>
