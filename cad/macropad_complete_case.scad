@@ -7,6 +7,7 @@
 include <macropad_top_plate.scad>
 include <macropad_grid_plate.scad>
 include <macropad_bottom_plate.scad>
+include <printable_locking_pins.scad>
 
 // ------------------------------------------------------------------------------
 // ASSEMBLY CONFIGURATION
@@ -17,6 +18,9 @@ explode = 30; // [0:100]
 
 /* [Microcontroller Type] */
 mcu = "esp32_devkit"; // [esp32_devkit, esp32_s2_mini, esp32_c3_xiao, rp2040_zero, pro_micro, pi_pico]
+
+/* [Fastening Style] */
+fastener = "pure_3d_print"; // [pure_3d_print, screws]
 
 /* [Grid Dimensions] */
 macropad_rows = 3;
@@ -31,6 +35,11 @@ bot_h = 9.0;
 // Exploded offsets
 z_gap = explode * 0.4;
 
+total_w = (macropad_cols * macropad_pitch) + (4.0 * 2);
+total_l = (macropad_rows * macropad_pitch) + 4.0 + 22.0;
+corner_x = (total_w / 2) - 2.5;
+corner_y = (total_l / 2) - 2.5;
+
 // ------------------------------------------------------------------------------
 // RENDER FULL SANDWICH ASSEMBLY
 // ------------------------------------------------------------------------------
@@ -41,7 +50,8 @@ color([0.15, 0.18, 0.24])
         rows = macropad_rows,
         cols = macropad_cols,
         pitch = macropad_pitch,
-        case_height = bot_h
+        case_height = bot_h,
+        insert_type = fastener
     );
 
 // 2. Monolithic Mid Gridplate (Translucent Indigo / Blue)
@@ -63,3 +73,21 @@ color([0.75, 0.80, 0.88, 0.95])
             pitch = macropad_pitch,
             top_plate_h = top_h
         );
+
+// 4. 100% 3D-Printable Split Snap Rivets (Amber Gold / Accent)
+if (fastener == "pure_3d_print") {
+    color([0.95, 0.70, 0.15]) {
+        for (cx = [-corner_x, corner_x]) {
+            for (cy = [-corner_y, corner_y]) {
+                translate([cx, cy, bot_h + mid_h + top_h + (z_gap * 3)])
+                    printable_snap_rivet(
+                        grip_len = top_h + mid_h + 2.0,
+                        pin_d = 2.6,
+                        head_d = 5.2,
+                        head_h = 1.4
+                    );
+            }
+        }
+    }
+}
+
